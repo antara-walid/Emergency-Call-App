@@ -15,6 +15,13 @@
         android:theme="@style/Theme.EmergencyCallApp"
         tools:targetApi="31">
         <activity
+            android:name=".contactsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".landingActivity"
             android:exported="false">
             <meta-data
