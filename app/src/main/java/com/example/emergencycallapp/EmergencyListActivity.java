@@ -42,12 +42,59 @@ public class EmergencyListActivity extends AppCompatActivity {
 
         // listeners
 
+        // 1.Fire
         cardViewFire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
                 number = "+212617241788";
-                makePhoneCall(number);
+                makePhoneCall(number); // the number should be brought from database
+            }
+        });
+        // 2.Flood
+        cardViewFlood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
+                number = "+212617241788";
+                makePhoneCall(number); // the number should be brought from database
+            }
+        });
+        // 3.Crime
+        cardViewCrime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
+                number = "+212617241788";
+                makePhoneCall(number); // the number should be brought from database
+            }
+        });
+        // 4.Accident
+        cardViewAccident.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
+                number = "+212617241788";
+                makePhoneCall(number); // the number should be brought from database
+            }
+        });
+
+        // 5.Earthquake
+        cardViewEarthQuake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
+                number = "+212617241788";
+                makePhoneCall(number); // the number should be brought from database
+            }
+        });
+        // 6.Illness
+        cardViewIllness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
+                number = "+212617241788";
+                makePhoneCall(number); // the number should be brought from database
             }
         });
 
