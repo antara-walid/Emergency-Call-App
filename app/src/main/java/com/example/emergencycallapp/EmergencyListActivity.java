@@ -45,6 +45,14 @@ public class EmergencyListActivity extends AppCompatActivity {
         // back arrow
         imageViewBackIcon = findViewById(R.id.imageViewBackIcon);
 
+        imageViewBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmergencyListActivity.this , LandingActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
         // 1.Fire
