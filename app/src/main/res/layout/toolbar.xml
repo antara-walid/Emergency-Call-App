@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/holo_red_light"
+    android:background="#BE0000"
     android:id="@+id/toolbar">
     <RelativeLayout
         android:layout_width="match_parent"
