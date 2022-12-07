@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class EmergencyListActivity extends AppCompatActivity {
@@ -23,13 +25,16 @@ public class EmergencyListActivity extends AppCompatActivity {
     private CardView cardViewAccident;
     private CardView cardViewEarthQuake;
     private CardView cardViewIllness;
-
-    private static String number ;
+    private ImageView imageViewBackIcon;
+    private static String number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.emergency_list);
+
+        // asking for permission
+        ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
 
         // selecting cards
 
@@ -39,24 +44,39 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewAccident = findViewById(R.id.cardViewAccident);
         cardViewEarthQuake = findViewById(R.id.cardViewEarthQuake);
         cardViewIllness = findViewById(R.id.cardViewIllness);
-
         // listeners
+
+        // back arrow
+        imageViewBackIcon = findViewById(R.id.imageViewBackIcon);
+
+        imageViewBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmergencyListActivity.this, LandingActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
         // 1.Fire
         cardViewFire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
                 number = "+212617241788";
+                String message = "user is facing a fire emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
+                sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
+
             }
         });
         // 2.Flood
         cardViewFlood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
                 number = "+212617241788";
+                String message = "user is facing a flood emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
+                sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
             }
         });
@@ -64,8 +84,9 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewCrime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
                 number = "+212617241788";
+                String message = "user is facing a crime emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
+                sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
             }
         });
@@ -73,8 +94,9 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewAccident.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
                 number = "+212617241788";
+                String message = "user is facing an accident emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
+                sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
             }
         });
@@ -83,18 +105,22 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewEarthQuake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
                 number = "+212617241788";
+                String message = "user is facing an earthquake emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
+                sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
             }
         });
-        // 6.Illness
+        // 6.Health issues
         cardViewIllness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(EmergencyListActivity.this, "you clicked fire", Toast.LENGTH_SHORT).show();
                 number = "+212617241788";
+                String message = "user is in poor health please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
+                sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
+
+
             }
         });
 
@@ -109,6 +135,12 @@ public class EmergencyListActivity extends AppCompatActivity {
             String dial = "tel:" + number;
             startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
         }
+    }
+
+    private void sendSms(String sms) {
+        ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(number, null, sms, null, null);
     }
 
     @Override
