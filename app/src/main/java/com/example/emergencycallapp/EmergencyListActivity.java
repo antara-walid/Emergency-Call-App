@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class EmergencyListActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class EmergencyListActivity extends AppCompatActivity {
     private CardView cardViewAccident;
     private CardView cardViewEarthQuake;
     private CardView cardViewIllness;
-
+    private ImageView imageViewBackIcon;
     private static String number ;
 
     @Override
@@ -39,8 +40,20 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewAccident = findViewById(R.id.cardViewAccident);
         cardViewEarthQuake = findViewById(R.id.cardViewEarthQuake);
         cardViewIllness = findViewById(R.id.cardViewIllness);
-
         // listeners
+
+        // back arrow
+        imageViewBackIcon = findViewById(R.id.imageViewBackIcon);
+
+        imageViewBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmergencyListActivity.this , LandingActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
         // 1.Fire
         cardViewFire.setOnClickListener(new View.OnClickListener() {
