@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +39,7 @@ public class EmergencyListActivity extends AppCompatActivity {
     private CardView cardViewFlood;
     private CardView cardViewCrime;
     private CardView cardViewAccident;
-    private CardView cardViewEarthQuake;
+    private CardView cardViewEmergencyNumber;
     private CardView cardViewIllness;
     private ImageView imageViewBackIcon;
     private TextView textViewMessage;
@@ -71,6 +70,15 @@ public class EmergencyListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.emergency_list);
 
+        // selecting cards
+
+        cardViewFire = findViewById(R.id.cardViewFire);
+        cardViewFlood = findViewById(R.id.cardViewFlood);
+        cardViewCrime = findViewById(R.id.cardViewCrime);
+        cardViewAccident = findViewById(R.id.cardViewAccident);
+        cardViewEmergencyNumber = findViewById(R.id.cardViewEmergencyNumber);
+        cardViewIllness = findViewById(R.id.cardViewIllness);
+
         // permissions
         mPerssmissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
             @Override
@@ -81,7 +89,13 @@ public class EmergencyListActivity extends AppCompatActivity {
                     isCallPermissionGranted = result.get(Manifest.permission.CALL_PHONE);
                 if (result.get(Manifest.permission.SEND_SMS) != null)
                     isSend_sms_PermissionGranted = result.get(Manifest.permission.SEND_SMS);
+                finish();
+                startActivity(getIntent());
             }
+
+
+
+
         });
 
         requestPermissions();
@@ -128,14 +142,7 @@ public class EmergencyListActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 
-        // selecting cards
 
-        cardViewFire = findViewById(R.id.cardViewFire);
-        cardViewFlood = findViewById(R.id.cardViewFlood);
-        cardViewCrime = findViewById(R.id.cardViewCrime);
-        cardViewAccident = findViewById(R.id.cardViewAccident);
-        cardViewEarthQuake = findViewById(R.id.cardViewEarthQuake);
-        cardViewIllness = findViewById(R.id.cardViewIllness);
         // listeners
 
         // back arrow
@@ -155,7 +162,7 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewFire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number = "+212617241788";
+                number = "+2126111111"; //150
                 String message = "user is facing a fire emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
                 sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
@@ -166,7 +173,7 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewFlood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number = "+212617241788";
+                number = "+212617241788"; // 150
                 String message = "user is facing a flood emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
                 sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
@@ -176,7 +183,7 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewCrime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number = "+212617241788";
+                number = "+212617241788"; //190
                 String message = "user is facing a crime emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
                 sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
@@ -186,7 +193,7 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewAccident.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number = "+212617241788";
+                number = "+212617241788"; //177
                 String message = "user is facing an accident emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
                 sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
@@ -194,10 +201,10 @@ public class EmergencyListActivity extends AppCompatActivity {
         });
 
         // 5.Earthquake
-        cardViewEarthQuake.setOnClickListener(new View.OnClickListener() {
+        cardViewEmergencyNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number = "+212617241788";
+                number = "+212617241788"; //150
                 String message = "user is facing an earthquake emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
                 sendSms(message);
                 makePhoneCall(number); // the number should be brought from database
@@ -207,7 +214,7 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewIllness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number = "+212617241788";
+                number = "+212708291452"; // 150
                 String message = "user is in poor health please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
                 sendSms(message);
                 makePhoneCall(number); // the number should be brought from database

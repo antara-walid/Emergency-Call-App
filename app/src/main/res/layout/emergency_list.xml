@@ -184,52 +184,15 @@
 
         </androidx.cardview.widget.CardView>
 
+
         <!--        5 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewEarthQuake"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="2"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_crisis_alert_78" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="EARTHQUAKE"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_red_dark"/>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!--        6 -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewIllness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_row="2"
             android:layout_rowWeight="1"
-            android:layout_column="1"
+            android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="8dp"
@@ -252,6 +215,44 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="HEALTH ISSUES"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_red_dark"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!--        6 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewEmergencyNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_crisis_alert_78" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EMERGENCY NUMBER"
                     android:textAlignment="center"
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_red_dark"/>
