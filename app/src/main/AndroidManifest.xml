@@ -24,14 +24,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".LandingActivity"
+            android:name=".EmergencyListActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".EmergencyListActivity"
+            android:name=".LandingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
