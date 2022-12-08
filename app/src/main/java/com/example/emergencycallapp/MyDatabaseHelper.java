@@ -2,6 +2,7 @@ package com.example.emergencycallapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteAbortException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -50,5 +51,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         else{
             Toast.makeText(context, "you successfully added your emergency call", Toast.LENGTH_SHORT).show();
         }
+    }
+    Cursor readAllDate(){
+        String query= "SELECT * FROM "+ TABLE_NAME;
+        SQLiteDatabase db =this.getReadableDatabase();
+
+        Cursor cursor =null;
+        if(db!= null)
+        {
+            cursor=db.rawQuery(query,null);
+        }
+        return cursor;
     }
 }
