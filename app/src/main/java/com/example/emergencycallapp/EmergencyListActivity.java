@@ -1,5 +1,8 @@
 package com.example.emergencycallapp;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -9,12 +12,26 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.security.PrivateKey;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class EmergencyListActivity extends AppCompatActivity {
 
@@ -26,15 +43,90 @@ public class EmergencyListActivity extends AppCompatActivity {
     private CardView cardViewEarthQuake;
     private CardView cardViewIllness;
     private ImageView imageViewBackIcon;
+    private TextView textViewMessage;
     private static String number;
+    private static String locationStr;
+    private static boolean check;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
+    String[] appPermissions = {
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    // ******
+    ActivityResultLauncher<String[]> mPerssmissionResultLauncher;
+    private boolean isLocationPermissionGranted = false;
+    private boolean isCallPermissionGranted = false;
+    private boolean isSend_sms_PermissionGranted = false;
+    // ******
+
+    private static final int PERMISSIONS_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        check = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.emergency_list);
 
-        // asking for permission
-        ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
+        // permissions
+        mPerssmissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+                if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) != null)
+                    isLocationPermissionGranted = result.get(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (result.get(Manifest.permission.CALL_PHONE) != null)
+                    isCallPermissionGranted = result.get(Manifest.permission.CALL_PHONE);
+                if (result.get(Manifest.permission.SEND_SMS) != null)
+                    isSend_sms_PermissionGranted = result.get(Manifest.permission.SEND_SMS);
+            }
+        });
+
+        requestPermissions();
+
+        // location manager
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                Log.d("location", location.toString());
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                try {
+                    List<Address> addresseList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    if (addresseList != null && addresseList.size() > 0) {
+                        if (addresseList.get(0).getAdminArea() != null) {
+                            locationStr = addresseList.get(0).getAddressLine(0);
+                            // displays the location once but location keeps changing
+                            if (check) {
+                                String text = "your location is : " + locationStr;
+                                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            check = false;
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
 
         // selecting cards
 
@@ -126,33 +218,46 @@ public class EmergencyListActivity extends AppCompatActivity {
 
     }
 
+
     private void makePhoneCall(String number) {
-        if (ContextCompat.checkSelfPermission(EmergencyListActivity.this,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(EmergencyListActivity.this,
-                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-        } else {
-            String dial = "tel:" + number;
-            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
-        }
+        String dial = "tel:" + number;
+        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
     }
 
     private void sendSms(String sms) {
-        ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
+        //  ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
+
+        sms += "\n" + "user location is " + locationStr;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(number, null, sms, null, null);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    private void requestPermissions() {
+        // 1.location permission
+        isLocationPermissionGranted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CALL) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                makePhoneCall(number);
-            } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
+        // 2.call permission
+        isCallPermissionGranted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.CALL_PHONE
+        ) == PackageManager.PERMISSION_GRANTED;
+
+        // 3.sms permission
+        isSend_sms_PermissionGranted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.SEND_SMS
+        ) == PackageManager.PERMISSION_GRANTED;
+
+        List<String> permissionRequests = new ArrayList<>();
+        if (!isLocationPermissionGranted)
+            permissionRequests.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        if (!isCallPermissionGranted)
+            permissionRequests.add(Manifest.permission.CALL_PHONE);
+        if (!isSend_sms_PermissionGranted)
+            permissionRequests.add(Manifest.permission.SEND_SMS);
+        if (!permissionRequests.isEmpty()) {
+            mPerssmissionResultLauncher.launch(permissionRequests.toArray(new String[0]));
         }
+
     }
 }
