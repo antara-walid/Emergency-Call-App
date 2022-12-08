@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,8 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class EmergencyListActivity extends AppCompatActivity {
 
@@ -36,27 +40,27 @@ public class EmergencyListActivity extends AppCompatActivity {
     private ImageView imageViewBackIcon;
     private TextView textViewMessage;
     private static String number;
-
+    private static String locationStr;
+    private static boolean check;
     private LocationManager locationManager;
     private LocationListener locationListener;
 
     String[] appPermissions = {
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.SEND_SMS
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.ACCESS_FINE_LOCATION
     };
 
     private static final int PERMISSIONS_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        check = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.emergency_list);
 
-        textViewMessage = findViewById(R.id.textViewEmergencyMessage); // delete it after
         // asking for permissions
-        if (checkRequestPermissions()) {
-
-        }
+       checkRequestPermissions();
 
         // location manager
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
@@ -65,9 +69,30 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 Log.d("location", location.toString());
-                //textViewMessage.setText(location.getLatitude() + " - "+ location.getLongitude());
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                try {
+                    List<Address> addresseList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    if (addresseList != null && addresseList.size() > 0) {
+                        if (addresseList.get(0).getAdminArea() != null) {
+                            locationStr = addresseList.get(0).getAddressLine(0);
+                            // displays the location once but location keeps changing
+                            if(check)
+                            {
+                                String text = "your location is : " + locationStr;
+                                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            check = false;
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
+
+
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -179,10 +204,9 @@ public class EmergencyListActivity extends AppCompatActivity {
             }
         }
 
-        if(!listOfPermissionsNeeded.isEmpty())
-        {
-            ActivityCompat.requestPermissions(EmergencyListActivity.this,listOfPermissionsNeeded.toArray(
-                    new String[listOfPermissionsNeeded.size()]) ,PERMISSIONS_REQUEST_CODE);
+        if (!listOfPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(EmergencyListActivity.this, listOfPermissionsNeeded.toArray(
+                    new String[listOfPermissionsNeeded.size()]), PERMISSIONS_REQUEST_CODE);
             return false;
         }
         return true;
@@ -200,7 +224,9 @@ public class EmergencyListActivity extends AppCompatActivity {
     }
 
     private void sendSms(String sms) {
-      //  ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
+        //  ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
+
+        sms += "\n" + "user location is " + locationStr;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(number, null, sms, null, null);
     }
