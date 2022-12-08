@@ -1,5 +1,8 @@
 package com.example.emergencycallapp;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -24,9 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class EmergencyListActivity extends AppCompatActivity {
 
@@ -50,6 +55,13 @@ public class EmergencyListActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
+    // ******
+    ActivityResultLauncher<String[]> mPerssmissionResultLauncher;
+    private boolean isLocationPermissionGranted = false;
+    private boolean isCallPermissionGranted = false;
+    private boolean isSend_sms_PermissionGranted = false;
+    // ******
+
     private static final int PERMISSIONS_REQUEST_CODE = 123;
 
     @Override
@@ -59,8 +71,20 @@ public class EmergencyListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.emergency_list);
 
-        // asking for permissions
-       checkRequestPermissions();
+        // permissions
+        mPerssmissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+                if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) != null)
+                    isLocationPermissionGranted = result.get(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (result.get(Manifest.permission.CALL_PHONE) != null)
+                    isCallPermissionGranted = result.get(Manifest.permission.CALL_PHONE);
+                if (result.get(Manifest.permission.SEND_SMS) != null)
+                    isSend_sms_PermissionGranted = result.get(Manifest.permission.SEND_SMS);
+            }
+        });
+
+        requestPermissions();
 
         // location manager
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
@@ -76,8 +100,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                         if (addresseList.get(0).getAdminArea() != null) {
                             locationStr = addresseList.get(0).getAddressLine(0);
                             // displays the location once but location keeps changing
-                            if(check)
-                            {
+                            if (check) {
                                 String text = "your location is : " + locationStr;
                                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
                                 toast.show();
@@ -90,7 +113,6 @@ public class EmergencyListActivity extends AppCompatActivity {
                 }
             }
         };
-
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -196,31 +218,10 @@ public class EmergencyListActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkRequestPermissions() {
-        List<String> listOfPermissionsNeeded = new ArrayList<>();
-        for (String permission : appPermissions) {
-            if (ContextCompat.checkSelfPermission(EmergencyListActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-                listOfPermissionsNeeded.add(permission); // so that we can ask for them later
-            }
-        }
-
-        if (!listOfPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(EmergencyListActivity.this, listOfPermissionsNeeded.toArray(
-                    new String[listOfPermissionsNeeded.size()]), PERMISSIONS_REQUEST_CODE);
-            return false;
-        }
-        return true;
-    }
 
     private void makePhoneCall(String number) {
-        if (ContextCompat.checkSelfPermission(EmergencyListActivity.this,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(EmergencyListActivity.this,
-                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-        } else {
-            String dial = "tel:" + number;
-            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
-        }
+        String dial = "tel:" + number;
+        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
     }
 
     private void sendSms(String sms) {
@@ -231,16 +232,32 @@ public class EmergencyListActivity extends AppCompatActivity {
         smsManager.sendTextMessage(number, null, sms, null, null);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    private void requestPermissions() {
+        // 1.location permission
+        isLocationPermissionGranted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CALL) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                makePhoneCall(number);
-            } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
+        // 2.call permission
+        isCallPermissionGranted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.CALL_PHONE
+        ) == PackageManager.PERMISSION_GRANTED;
+
+        // 3.sms permission
+        isSend_sms_PermissionGranted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.SEND_SMS
+        ) == PackageManager.PERMISSION_GRANTED;
+
+        List<String> permissionRequests = new ArrayList<>();
+        if (!isLocationPermissionGranted)
+            permissionRequests.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        if (!isCallPermissionGranted)
+            permissionRequests.add(Manifest.permission.CALL_PHONE);
+        if (!isSend_sms_PermissionGranted)
+            permissionRequests.add(Manifest.permission.SEND_SMS);
+        if (!permissionRequests.isEmpty()) {
+            mPerssmissionResultLauncher.launch(permissionRequests.toArray(new String[0]));
         }
+
     }
 }
