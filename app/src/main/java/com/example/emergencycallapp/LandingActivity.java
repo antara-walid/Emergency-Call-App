@@ -8,9 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+<<<<<<< HEAD:app/src/main/java/com/example/emergencycallapp/landingActivity.java
 public class landingActivity extends AppCompatActivity {
     Button sosbtn;
     ImageView add;
+=======
+public class LandingActivity extends AppCompatActivity {
+
+>>>>>>> 089d3e959c206d3cc7a278679e60aba53296a239:app/src/main/java/com/example/emergencycallapp/LandingActivity.java
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
