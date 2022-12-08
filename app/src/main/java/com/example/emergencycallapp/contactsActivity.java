@@ -17,7 +17,7 @@ public class contactsActivity extends AppCompatActivity {
         imageViewBackIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent=new Intent(contactsActivity.this,landingActivity.class);
+                Intent myIntent=new Intent(contactsActivity.this,LandingActivity.class);
                 startActivity(myIntent);
                 finish();
             }
