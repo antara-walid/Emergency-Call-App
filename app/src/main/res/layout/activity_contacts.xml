@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    tools:context=".contactsActivity">
+    tools:context=".ContactsActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,14 +31,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/textprenom"
+                android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Prenom"
+                android:text="Full name"
                 />
             <EditText
-                android:id="@+id/editprenom"
+                android:id="@+id/editName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
@@ -48,14 +48,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/textnom"
+                android:id="@+id/num"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nom"
+                android:text="Number phone"
                 />
             <EditText
-                android:id="@+id/editnom"
+                android:id="@+id/editnum"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
@@ -65,14 +65,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/txtdprt"
+                android:id="@+id/email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Département"
+                android:text="E-mail"
                 />
             <EditText
-                android:id="@+id/editdprt"
+                android:id="@+id/editemail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
@@ -80,7 +80,7 @@
         <Button
             android:layout_weight="1"
             android:layout_below="@+id/contactListView"
-            android:id="@+id/create"
+            android:id="@+id/createbtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:backgroundTint="@android:color/holo_red_dark"
