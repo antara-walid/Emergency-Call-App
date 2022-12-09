@@ -93,9 +93,6 @@ public class EmergencyListActivity extends AppCompatActivity {
                 startActivity(getIntent());
             }
 
-
-
-
         });
 
         requestPermissions();
