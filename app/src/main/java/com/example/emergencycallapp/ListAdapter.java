@@ -37,6 +37,6 @@ public class ListAdapter extends ArrayAdapter<EmergencyContact> {
         fullName.setText(contact.getFullName());
         phoneNumber.setText(contact.getPhoneNumber());
 
-        return super.getView(position, convertView, parent);
+        return convertView;
     }
 }

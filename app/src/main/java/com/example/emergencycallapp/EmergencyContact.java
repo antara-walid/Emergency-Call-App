@@ -12,6 +12,11 @@ public class EmergencyContact {
         this.email = email;
     }
 
+    public EmergencyContact(String fullName, String phoneNumber) {
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getFullName() {
         return fullName;
     }
