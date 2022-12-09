@@ -43,16 +43,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_NAME,name);
         cv.put(COLUMN_NUM,num);
         cv.put(COLUMN_EMAIL,email);
-
+        System.out.println("test");
         long result = db.insert(TABLE_NAME,null,cv);
         if(result==-1){
+            System.out.println("test1");
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
         }
         else{
+            System.out.println("test2");
             Toast.makeText(context, "you successfully added your emergency call", Toast.LENGTH_SHORT).show();
         }
     }
-    Cursor readAllDate(){
+    Cursor readAllData(){
         String query= "SELECT * FROM "+ TABLE_NAME;
         SQLiteDatabase db =this.getReadableDatabase();
 

@@ -1,5 +1,6 @@
 package com.example.emergencycallapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHolder> {
 
     Context context;
-    ArrayList contact_id, contact_name, contact_num, contact_email;
+    ArrayList contact_name, contact_num, contact_email;
+    Activity activity;
 
-
-    CustomAdapter(Context context,ArrayList contact_id ,ArrayList contact_name,ArrayList contact_num,ArrayList contact_email){
+    CustomAdapter(Activity activity, Context context , ArrayList contact_name, ArrayList contact_num, ArrayList contact_email){
+        this.activity = activity;
         this.context=context;
-        this.contact_id=contact_id;
         this.contact_name=contact_name;
         this.contact_num=contact_num;
         this.contact_email=contact_email;
@@ -28,7 +29,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHold
     @Override
     public MyVIewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater= LayoutInflater.from(context);
-        View view=inflater.inflate(R.layout.recycle_view,parent,false);
+        View view=inflater.inflate(R.layout.my_row,parent,false);
         return new MyVIewHolder(view);
 
     }
@@ -42,7 +43,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHold
 
     @Override
     public int getItemCount() {
-        return 0;
+        return  contact_name.size();
     }
 
     public class MyVIewHolder extends RecyclerView.ViewHolder {

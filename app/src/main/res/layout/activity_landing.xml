@@ -17,11 +17,20 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             >
+
             <ImageView
-                android:id="@+id/imageViewBackIcon"
+                android:id="@+id/imageViewAdmin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_add_24"
+                android:src="@drawable/ic_baseline_admin_panel_settings_24"
+                android:layout_marginLeft="350dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/imageViewContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_perm_contact_calendar_24"
                 android:layout_centerVertical="true"/>
 
             <TextView
