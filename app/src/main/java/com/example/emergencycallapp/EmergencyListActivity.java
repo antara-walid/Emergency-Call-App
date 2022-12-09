@@ -93,9 +93,6 @@ public class EmergencyListActivity extends AppCompatActivity {
                 startActivity(getIntent());
             }
 
-
-
-
         });
 
         requestPermissions();
@@ -200,17 +197,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             }
         });
 
-        // 5.Earthquake
-        cardViewEmergencyNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                number = "+212617241788"; //150
-                String message = "user is facing an earthquake emergency please contact him/her to make sure he is all right"; // this message is hard coded for now but it should get it information form db
-                sendSms(message);
-                makePhoneCall(number); // the number should be brought from database
-            }
-        });
-        // 6.Health issues
+        // 5.Health issues
         cardViewIllness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,6 +207,16 @@ public class EmergencyListActivity extends AppCompatActivity {
                 makePhoneCall(number); // the number should be brought from database
 
 
+            }
+        });
+
+        // 6.Earthquake
+        cardViewEmergencyNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmergencyListActivity.this, EmergencyContactsActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
