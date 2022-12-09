@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class LandingActivity extends AppCompatActivity {
+
     Button sosbtn;
     ImageView contact;
     @Override
@@ -20,7 +21,7 @@ public class LandingActivity extends AppCompatActivity {
         sosbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent=new Intent(LandingActivity.this,EmergencyListActivity.class);
+                Intent myIntent = new Intent(LandingActivity.this, EmergencyListActivity.class);
                 startActivity(myIntent);
                 finish();
             }
