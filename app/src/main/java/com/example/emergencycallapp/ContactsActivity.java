@@ -1,18 +1,27 @@
 package com.example.emergencycallapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class ContactsActivity extends AppCompatActivity {
     EditText editName,editnum,editemail;
-    Button create_btn;
+    Button create_btn,add_button;
     ImageView imageViewBackIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,12 +32,12 @@ public class ContactsActivity extends AppCompatActivity {
         editnum=findViewById(R.id.editnum);
         editemail=findViewById(R.id.editemail);
         create_btn=findViewById(R.id.createbtn);
-
+        add_button = findViewById(R.id.createbtn);
         //this listener is to go back to landingActivity when clicking on back arrow "<-"
         imageViewBackIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent=new Intent(ContactsActivity.this,LandingActivity.class);
+                Intent myIntent=new Intent(ContactsActivity.this,ListContactsActivity.class);
                 startActivity(myIntent);
                 finish();
             }
@@ -40,6 +49,17 @@ public class ContactsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(ContactsActivity.this);
                 myDB.addContact(editName.getText().toString().trim(),editnum.getText().toString().trim(),editemail.getText().toString().trim());
+            }
+        });
+
+
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyDatabaseHelper myDB = new MyDatabaseHelper(ContactsActivity.this);
+                myDB.addContact(editName.getText().toString().trim(),
+                        editnum.getText().toString().trim(),
+                        editemail.getText().toString().trim());
             }
         });
 

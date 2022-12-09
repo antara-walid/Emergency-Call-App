@@ -11,14 +11,13 @@ import android.widget.ImageView;
 public class LandingActivity extends AppCompatActivity {
 
     Button sosbtn;
-    ImageView add;
-
+    ImageView contact;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
-        sosbtn = findViewById(R.id.sosbtn);
-        add = findViewById(R.id.imageViewBackIcon);
+        sosbtn=findViewById(R.id.sosbtn);
+        contact=findViewById(R.id.imageViewContact);
         sosbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -27,11 +26,10 @@ public class LandingActivity extends AppCompatActivity {
                 finish();
             }
         });
-        add.setOnClickListener(new View.OnClickListener() {
+        contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent myIntent = new Intent(LandingActivity.this, ContactsActivity.class);
+                Intent myIntent=new Intent(LandingActivity.this, ListContactsActivity.class);
                 startActivity(myIntent);
                 finish();
             }

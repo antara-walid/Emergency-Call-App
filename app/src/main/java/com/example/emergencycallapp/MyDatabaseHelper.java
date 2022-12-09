@@ -2,6 +2,7 @@ package com.example.emergencycallapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteAbortException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -42,13 +43,26 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_NAME,name);
         cv.put(COLUMN_NUM,num);
         cv.put(COLUMN_EMAIL,email);
-
+        System.out.println("test");
         long result = db.insert(TABLE_NAME,null,cv);
         if(result==-1){
+            System.out.println("test1");
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
         }
         else{
+            System.out.println("test2");
             Toast.makeText(context, "you successfully added your emergency call", Toast.LENGTH_SHORT).show();
         }
+    }
+    Cursor readAllData(){
+        String query= "SELECT * FROM "+ TABLE_NAME;
+        SQLiteDatabase db =this.getReadableDatabase();
+
+        Cursor cursor =null;
+        if(db!= null)
+        {
+            cursor=db.rawQuery(query,null);
+        }
+        return cursor;
     }
 }
