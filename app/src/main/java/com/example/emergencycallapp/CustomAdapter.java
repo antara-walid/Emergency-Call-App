@@ -2,9 +2,13 @@ package com.example.emergencycallapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +43,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHold
         holder.contact_name_txt.setText(String.valueOf(contact_name.get(position)));
         holder.contact_num_txt.setText(String.valueOf(contact_num.get(position)));
         holder.contact_email_txt.setText(String.valueOf(contact_email.get(position)));
+
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, UpdateActivity.class);
+                intent.putExtra("name", String.valueOf(contact_name.get(position)));
+                intent.putExtra("num", String.valueOf(contact_num.get(position)));
+                intent.putExtra("email", String.valueOf(contact_email.get(position)));
+                activity.startActivityForResult(intent, 1);
+            }
+        });
     }
 
     @Override
@@ -49,13 +64,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHold
     public class MyVIewHolder extends RecyclerView.ViewHolder {
 
         TextView contact_name_txt,contact_num_txt,contact_email_txt;
-
+        LinearLayout mainLayout;
         public MyVIewHolder(@NonNull View itemView) {
             super(itemView);
             contact_name_txt=itemView.findViewById(R.id.contact_name_txt);
             contact_num_txt=itemView.findViewById(R.id.contact_num_txt);
             contact_email_txt=itemView.findViewById(R.id.contact_email_txt);
+            mainLayout=itemView.findViewById(R.id.mainLayout);
 
+            Animation translate_anim= AnimationUtils.loadAnimation(context, R.anim.translate_anim);
+            mainLayout.setAnimation(translate_anim);
 
         }
     }
