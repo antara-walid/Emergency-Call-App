@@ -1,13 +1,18 @@
 package com.example.emergencycallapp;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +22,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class ListContactsActivity extends AppCompatActivity {
+
+    ImageView imageViewBackIcon;
 
     RecyclerView recyclerView;
     FloatingActionButton add_button;
@@ -31,6 +38,8 @@ public class ListContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_contacts);
 
+        imageViewBackIcon=findViewById(R.id.imageViewBackIcon);
+
         recyclerView = findViewById(R.id.recyclerView);
         add_button = findViewById(R.id.add_button);
         no_data = findViewById(R.id.no_data);
@@ -39,6 +48,14 @@ public class ListContactsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ListContactsActivity.this, ContactsActivity.class);
                 startActivity(intent);
+            }
+        });
+        imageViewBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent=new Intent(ListContactsActivity.this,LandingActivity.class);
+                startActivity(myIntent);
+                finish();
             }
         });
 
@@ -76,5 +93,29 @@ public class ListContactsActivity extends AppCompatActivity {
             }
             no_data.setVisibility(View.GONE);
         }
+    }
+
+    void confirmDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete All?");
+        builder.setMessage("Are you sure you want to delete all Data?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MyDatabaseHelper myDB = new MyDatabaseHelper(ListContactsActivity.this);
+                myDB.deleteAllData();
+                //Refresh Activity
+                Intent intent = new Intent(ListContactsActivity.this, ListContactsActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.create().show();
     }
 }
