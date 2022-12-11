@@ -72,6 +72,7 @@ public class EmergencyListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.emergency_list);
 
+
         // selecting cards
 
         cardViewFire = findViewById(R.id.cardViewFire);
@@ -101,8 +102,9 @@ public class EmergencyListActivity extends AppCompatActivity {
 
         // static data for test // you should get data from db
 
-        String [] phoneNumbers = {"06171238" ,"06178382"};
-        emergencyPhoneNumber = phoneNumbers[0].substring(1);
+        MyDatabaseHelper myDatabaseHelper = new MyDatabaseHelper(EmergencyListActivity.this);
+
+        emergencyPhoneNumber = myDatabaseHelper.getFirstRow().getPhoneNumber();
 
         // location manager
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
