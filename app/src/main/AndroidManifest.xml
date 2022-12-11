@@ -46,6 +46,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".EmergencyContactsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".LandingActivity"
             android:exported="true">
             <intent-filter>

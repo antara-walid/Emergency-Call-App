@@ -210,7 +210,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             }
         });
 
-        // 6.Earthquake
+        // 6.emergency number
         cardViewEmergencyNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
