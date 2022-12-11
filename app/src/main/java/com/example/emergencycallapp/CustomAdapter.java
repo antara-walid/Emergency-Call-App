@@ -14,17 +14,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHolder> {
 
     Context context;
-    ArrayList contact_name, contact_num, contact_email;
+    ArrayList contact_name, contact_num, contact_email,contact_id;
     Activity activity;
 
-    CustomAdapter(Activity activity, Context context , ArrayList contact_name, ArrayList contact_num, ArrayList contact_email){
+    CustomAdapter(Activity activity, Context context , ArrayList contact_id,ArrayList contact_name, ArrayList contact_num, ArrayList contact_email){
         this.activity = activity;
         this.context=context;
+        this.contact_id=contact_id;
         this.contact_name=contact_name;
         this.contact_num=contact_num;
         this.contact_email=contact_email;
@@ -40,6 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyVIewHolder holder, int position) {
+        holder.contact_name_txt.setText(String.valueOf(contact_id.get(position)));
         holder.contact_name_txt.setText(String.valueOf(contact_name.get(position)));
         holder.contact_num_txt.setText(String.valueOf(contact_num.get(position)));
         holder.contact_email_txt.setText(String.valueOf(contact_email.get(position)));
@@ -48,6 +51,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, UpdateActivity.class);
+                intent.putExtra("id",String.valueOf(contact_id.get(position)));
                 intent.putExtra("name", String.valueOf(contact_name.get(position)));
                 intent.putExtra("num", String.valueOf(contact_num.get(position)));
                 intent.putExtra("email", String.valueOf(contact_email.get(position)));
@@ -63,7 +67,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyVIewHold
 
     public class MyVIewHolder extends RecyclerView.ViewHolder {
 
-        TextView contact_name_txt,contact_num_txt,contact_email_txt;
+        TextView contact_name_txt,contact_num_txt,contact_email_txt,contact_id_txt;
         LinearLayout mainLayout;
         public MyVIewHolder(@NonNull View itemView) {
             super(itemView);
