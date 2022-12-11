@@ -20,7 +20,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/ic_baseline_health_and_safety_78"/>
+                android:src="@drawable/ic_baseline_call_78"/>
 
 
             <LinearLayout
@@ -33,7 +33,7 @@
                     android:id="@+id/fullName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Christopher"
+                    android:text="john snow"
                     android:textColor="@color/black"
                     android:textSize="26sp"
                     android:textStyle="bold"/>

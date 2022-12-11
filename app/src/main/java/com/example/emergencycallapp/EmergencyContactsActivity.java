@@ -2,6 +2,8 @@ package com.example.emergencycallapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,9 +43,13 @@ public class EmergencyContactsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String text = fullNames[i];
-                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-                toast.show();
+                String phoneNumber = phoneNumbers[i];
+                makePhoneCall(phoneNumber);
             }
         });
+    }
+    private void makePhoneCall(String number) {
+        String dial = "tel:" + number;
+        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
     }
 }

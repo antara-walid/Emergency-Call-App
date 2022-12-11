@@ -5,9 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ListView
+        android:id="@+id/listViewContacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listViewContacts"
-        tools:listitem="@layout/list_item"/>
+        tools:layout_editor_absoluteX="190dp"
+        tools:layout_editor_absoluteY="-161dp"
+        tools:listitem="@layout/list_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
