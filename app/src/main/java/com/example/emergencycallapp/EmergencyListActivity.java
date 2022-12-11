@@ -49,6 +49,8 @@ public class EmergencyListActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
 
+    private String emergencyPhoneNumber;
+
     String[] appPermissions = {
             Manifest.permission.SEND_SMS,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -96,6 +98,11 @@ public class EmergencyListActivity extends AppCompatActivity {
         });
 
         requestPermissions();
+
+        // static data for test // you should get data from db
+
+        String [] phoneNumbers = {"06171238" ,"06178382"};
+        emergencyPhoneNumber = phoneNumbers[0].substring(1);
 
         // location manager
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
@@ -210,7 +217,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             }
         });
 
-        // 6.Earthquake
+        // 6.emergency number
         cardViewEmergencyNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,9 +238,18 @@ public class EmergencyListActivity extends AppCompatActivity {
     private void sendSms(String sms) {
         //  ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
 
-        sms += "\n" + "user location is " + locationStr;
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(number, null, sms, null, null);
+        if(locationStr != null)
+        {
+            sms += "\n" + "user location is " + locationStr;
+            SmsManager smsManager = SmsManager.getDefault();
+            String firstEmergencyNumber = "+212"+emergencyPhoneNumber;
+            smsManager.sendTextMessage(firstEmergencyNumber, null, sms, null, null);
+        }else{
+            SmsManager smsManager = SmsManager.getDefault();
+            String firstEmergencyNumber = "+212"+emergencyPhoneNumber;
+            smsManager.sendTextMessage(firstEmergencyNumber, null, sms, null, null);
+        }
+
     }
 
     private void requestPermissions() {
