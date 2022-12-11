@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.emergencycallapp.databinding.ActivityEmergencyContactsBinding;
@@ -16,11 +17,27 @@ import java.util.ArrayList;
 public class EmergencyContactsActivity extends AppCompatActivity {
 
     ActivityEmergencyContactsBinding binding;
+
+    private ImageView imageViewBackIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityEmergencyContactsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
+        // back icon
+        imageViewBackIcon = findViewById(R.id.imageViewBackIcon);
+
+        imageViewBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmergencyContactsActivity.this, EmergencyListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
         // static data for test
 
