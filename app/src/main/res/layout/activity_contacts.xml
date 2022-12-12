@@ -92,18 +92,6 @@
             android:layout_marginTop="30dp"/>
 
 
-        <Button
-            android:layout_weight="1"
-            android:layout_below="@+id/contactListView"
-            android:id="@+id/create"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:backgroundTint="#fff"
-            android:text="Admin"
-            android:textColor="#000"
-            android:layout_gravity="center_horizontal"
-            />
-
 
 
     </LinearLayout>
