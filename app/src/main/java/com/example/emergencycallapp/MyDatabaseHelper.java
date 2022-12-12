@@ -34,7 +34,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_NAME + " TEXT, " + COLUMN_NUM + " TEXT, " + COLUMN_EMAIL + " TEXT);";
         db.execSQL(query);
-        addContact("firstContact", "0617171717" , "contact@gmail.com");
     }
 
     @Override
