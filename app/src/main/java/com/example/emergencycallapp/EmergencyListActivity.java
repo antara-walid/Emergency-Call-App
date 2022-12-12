@@ -114,49 +114,42 @@ public class EmergencyListActivity extends AppCompatActivity {
         // location manager
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                Log.d("location", location.toString());
-                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                try {
-                    List<Address> addresseList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    if (addresseList != null && addresseList.size() > 0) {
-                        if (addresseList.get(0).getAdminArea() != null) {
-                            locationStr = addresseList.get(0).getAddressLine(0);
-                            // displays the location once but location keeps changing
-                            if (check) {
-                                String text = "your location is : " + locationStr;
-                                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-                                toast.show();
+
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    Log.d("location", location.toString());
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    try {
+                        List<Address> addresseList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                        if (addresseList != null && addresseList.size() > 0) {
+                            if (addresseList.get(0).getAdminArea() != null) {
+                                locationStr = addresseList.get(0).getAddressLine(0);
+                                // displays the location once but location keeps changing
+                                if (check) {
+                                    String text = "your location is : " + locationStr;
+                                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                check = false;
                             }
-                            check = false;
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            };
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
             }
-        };
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-
-
-
-
-
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
     }
 
@@ -245,24 +238,47 @@ public class EmergencyListActivity extends AppCompatActivity {
     }
 
     private void makePhoneCall(String number) {
-        String dial = "tel:" + number;
-        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+
+        try {
+            String dial = "tel:" + number;
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+        }catch (Exception e)
+        {
+            String text = "permission denied";
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+            toast.show();
+            Intent intent = new Intent(EmergencyListActivity.this, LandingActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
     }
 
     private void sendSms(String sms) {
         //  ActivityCompat.requestPermissions(EmergencyListActivity.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
 
-        if(locationStr != null)
+        try{
+            if(locationStr != null)
+            {
+                sms += "\n" + "user location is " + locationStr;
+                SmsManager smsManager = SmsManager.getDefault();
+                String firstEmergencyNumber = "+212"+emergencyPhoneNumber;
+                smsManager.sendTextMessage(firstEmergencyNumber, null, sms, null, null);
+            }else{
+                SmsManager smsManager = SmsManager.getDefault();
+                String firstEmergencyNumber = "+212"+emergencyPhoneNumber;
+                smsManager.sendTextMessage(firstEmergencyNumber, null, sms, null, null);
+            }
+        }catch (Exception e)
         {
-            sms += "\n" + "user location is " + locationStr;
-            SmsManager smsManager = SmsManager.getDefault();
-            String firstEmergencyNumber = "+212"+emergencyPhoneNumber;
-            smsManager.sendTextMessage(firstEmergencyNumber, null, sms, null, null);
-        }else{
-            SmsManager smsManager = SmsManager.getDefault();
-            String firstEmergencyNumber = "+212"+emergencyPhoneNumber;
-            smsManager.sendTextMessage(firstEmergencyNumber, null, sms, null, null);
+            String text = "permission denied";
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+            toast.show();
+            Intent intent = new Intent(EmergencyListActivity.this, LandingActivity.class);
+            startActivity(intent);
+            finish();
         }
+
 
     }
 
@@ -294,4 +310,6 @@ public class EmergencyListActivity extends AppCompatActivity {
         }
 
     }
+
+    // feature
 }
