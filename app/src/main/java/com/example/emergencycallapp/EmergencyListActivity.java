@@ -49,7 +49,7 @@ public class EmergencyListActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
 
-    private String emergencyPhoneNumber;
+    private String emergencyPhoneNumber="0617404";
 
     String[] appPermissions = {
             Manifest.permission.SEND_SMS,
@@ -82,6 +82,19 @@ public class EmergencyListActivity extends AppCompatActivity {
         cardViewEmergencyNumber = findViewById(R.id.cardViewEmergencyNumber);
         cardViewIllness = findViewById(R.id.cardViewIllness);
 
+
+
+
+        // database
+
+        try {
+            MyDatabaseHelper myDatabaseHelper = new MyDatabaseHelper(EmergencyListActivity.this);
+            emergencyPhoneNumber = myDatabaseHelper.getFirstRow().getPhoneNumber();
+        }catch (Exception e)
+        {
+
+        }
+
         // permissions
         mPerssmissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
             @Override
@@ -92,19 +105,11 @@ public class EmergencyListActivity extends AppCompatActivity {
                     isCallPermissionGranted = result.get(Manifest.permission.CALL_PHONE);
                 if (result.get(Manifest.permission.SEND_SMS) != null)
                     isSend_sms_PermissionGranted = result.get(Manifest.permission.SEND_SMS);
-                finish();
-                startActivity(getIntent());
             }
 
         });
 
         requestPermissions();
-
-        // static data for test // you should get data from db
-
-        MyDatabaseHelper myDatabaseHelper = new MyDatabaseHelper(EmergencyListActivity.this);
-
-        emergencyPhoneNumber = myDatabaseHelper.getFirstRow().getPhoneNumber();
 
         // location manager
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
@@ -149,6 +154,15 @@ public class EmergencyListActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         // listeners
 
         // back arrow
@@ -228,9 +242,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
-
 
     private void makePhoneCall(String number) {
         String dial = "tel:" + number;
